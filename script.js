@@ -56,73 +56,40 @@ searchPanel.addEventListener('click', event => { if (event.target === searchPane
 document.querySelectorAll('.search-results button').forEach((button, index) => button.addEventListener('click', () => { searchPanel.classList.remove('show'); showNote([1, 2, 3][index]); }));
 const channelButton = document.querySelector('.channel-button');
 const signal = document.querySelector('.signal');
+const channelTrack = 'assets/melancholic-lofi-anime.mp3';
 let channelPlayer = null;
 
 function stopChannel() {
   if (!channelPlayer) return;
-  channelPlayer.stop();
+  channelPlayer.pause();
+  channelPlayer.currentTime = 0;
   channelPlayer = null;
 }
 
-function startChannel() {
-  const AudioContext = window.AudioContext || window.webkitAudioContext;
-  if (!AudioContext) return false;
-
-  const context = new AudioContext();
-  const master = context.createGain();
-  master.gain.value = 0.07;
-  master.connect(context.destination);
-
-  const pad = context.createOscillator();
-  const padGain = context.createGain();
-  pad.type = 'sine';
-  pad.frequency.value = 110;
-  padGain.gain.value = 0.11;
-  pad.connect(padGain).connect(master);
-  pad.start();
-
-  const melody = [293.66, 261.63, 233.08, 220, 196, 174.61, 196, 0, 233.08, 261.63, 293.66, 0];
-  let step = 0;
-  let timer = null;
-  const playStep = () => {
-    const now = context.currentTime;
-    const frequency = melody[step % melody.length];
-    step += 1;
-    if (!frequency) {
-      timer = window.setTimeout(playStep, 900);
-      return;
-    }
-    const oscillator = context.createOscillator();
-    const noteGain = context.createGain();
-    oscillator.type = 'triangle';
-    oscillator.frequency.value = frequency;
-    noteGain.gain.setValueAtTime(0.001, now);
-    noteGain.gain.exponentialRampToValueAtTime(0.22, now + 0.08);
-    noteGain.gain.exponentialRampToValueAtTime(0.001, now + 0.82);
-    oscillator.connect(noteGain).connect(master);
-    oscillator.start(now);
-    oscillator.stop(now + 0.88);
-    timer = window.setTimeout(playStep, 900);
-  };
-
-  channelPlayer = {
-    stop() {
-      window.clearTimeout(timer);
-      pad.stop();
-      context.close();
-    }
-  };
-  playStep();
-  return true;
+async function startChannel() {
+  const audio = new Audio(channelTrack);
+  audio.loop = true;
+  audio.volume = 0.58;
+  try {
+    await audio.play();
+    channelPlayer = audio;
+    return true;
+  } catch (error) {
+    audio.remove();
+    return false;
+  }
 }
 
-channelButton.addEventListener('click', event => {
+channelButton.addEventListener('click', async event => {
   event.preventDefault();
   const isPlaying = signal.classList.contains('channel-active');
   if (isPlaying) {
     stopChannel();
-  } else if (!startChannel()) {
-    return;
+  } else {
+    channelButton.setAttribute('aria-busy', 'true');
+    const started = await startChannel();
+    channelButton.removeAttribute('aria-busy');
+    if (!started) return;
   }
   signal.classList.toggle('channel-active', !isPlaying);
   channelButton.setAttribute('aria-pressed', String(!isPlaying));
