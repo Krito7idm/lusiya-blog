@@ -75,27 +75,32 @@ function startChannel() {
   const padGain = context.createGain();
   pad.type = 'sine';
   pad.frequency.value = 130.81;
-  padGain.gain.value = 0.18;
+  padGain.gain.value = 0.11;
   pad.connect(padGain).connect(master);
   pad.start();
 
-  const melody = [261.63, 329.63, 392, 523.25, 392, 329.63, 293.66, 392];
+  const melody = [329.63, 293.66, 261.63, 0, 293.66, 246.94, 220, 0, 261.63, 293.66, 329.63, 0];
   let step = 0;
   let timer = null;
   const playStep = () => {
     const now = context.currentTime;
+    const frequency = melody[step % melody.length];
+    step += 1;
+    if (!frequency) {
+      timer = window.setTimeout(playStep, 900);
+      return;
+    }
     const oscillator = context.createOscillator();
     const noteGain = context.createGain();
     oscillator.type = 'triangle';
-    oscillator.frequency.value = melody[step % melody.length];
+    oscillator.frequency.value = frequency;
     noteGain.gain.setValueAtTime(0.001, now);
-    noteGain.gain.exponentialRampToValueAtTime(0.42, now + 0.04);
-    noteGain.gain.exponentialRampToValueAtTime(0.001, now + 0.62);
+    noteGain.gain.exponentialRampToValueAtTime(0.22, now + 0.08);
+    noteGain.gain.exponentialRampToValueAtTime(0.001, now + 0.82);
     oscillator.connect(noteGain).connect(master);
     oscillator.start(now);
-    oscillator.stop(now + 0.65);
-    step += 1;
-    timer = window.setTimeout(playStep, 650);
+    oscillator.stop(now + 0.88);
+    timer = window.setTimeout(playStep, 900);
   };
 
   channelPlayer = {
