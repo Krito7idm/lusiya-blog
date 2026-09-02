@@ -10,11 +10,11 @@ window.LUSIYA_POSTS = [
   },
   {
     "slug": "2026-08-17-1",
-    "title": "适合一个人散步时听的 12 首歌",
+    "title": "适合一个人散步时听的7首歌",
     "description": "耳机里的小宇宙，和城市一起缓慢移动。",
     "date": "2026-08-17T12:00:00+08:00",
     "category": "PLAYLIST",
-    "body": "<p>这份歌单没有很明确的主题。它适合傍晚六点半的街道、雨后反光的地面，或者回家的末班车。它们不会催促你抵达哪里，只是让路变得不那么长。</p><h2>Side A · 走出门的前十分钟</h2><p>01. Midnight City · M83 02. Sunset Lover · Petit Biscuit 03. Space Song · Beach House 04. Young Folks · Peter Bjorn and John</p><p>前几首最好在刚出门的时候播放。城市还没有完全暗下来，风从建筑之间穿过，所有事情看上去都有一点电影感。</p><h2>Side B · 把脚步放慢</h2><p>05. Plastic Love · 竹内まりや 06. 505 · Arctic Monkeys 07. Sweet Disposition · The Temper Trap 08. Cherry-coloured Funk · Cocteau Twins</p><blockquote>有些歌不是为了听清歌词，而是为了让你在某个路口停一下。</blockquote><p>剩下四首留给你自己补齐。音乐是一件很私人的事，最好的歌单总有一部分是别人无法替你写下的。</p>"
+    "body": "<p>这份歌单没有很明确的主题。它适合傍晚六点半的街道、雨后反光的地面，或者回家的末班车。它们不会催促你抵达哪里，只是让路变得不那么长。</p><h2>Side A · 走出门的前十分钟</h2><p>1. Midnight City · M83 2. Sunset Lover · Petit Biscuit 3. Space Song · Beach House 4. Young Folks · Peter Bjorn and John</p><p>前几首最好在刚出门的时候播放。城市还没有完全暗下来，风从建筑之间穿过，所有事情看上去都有一点电影感。</p><h2>Side B · 把脚步放慢</h2><p>5. Plastic Love · 竹内まりや 6. 505 · Arctic Monkeys 7. Sweet Disposition · The Temper Trap 8. Cherry-coloured Funk · Cocteau Twins</p><blockquote>有些歌不是为了听清歌词，而是为了让你在某个路口停一下。</blockquote>"
   },
   {
     "slug": "2026-08-09-2",
