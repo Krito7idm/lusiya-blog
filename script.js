@@ -52,6 +52,74 @@ document.querySelector('.search').addEventListener('click', () => { searchPanel.
 document.querySelector('.close-search').addEventListener('click', () => searchPanel.classList.remove('show'));
 searchPanel.addEventListener('click', event => { if (event.target === searchPanel) searchPanel.classList.remove('show'); });
 document.querySelectorAll('.search-results button').forEach((button, index) => button.addEventListener('click', () => { searchPanel.classList.remove('show'); showNote([1, 2, 3][index]); }));
-document.querySelector('.channel-button').addEventListener('click', event => { event.preventDefault(); const signal = document.querySelector('.signal'); signal.classList.toggle('channel-active'); event.currentTarget.innerHTML = signal.classList.contains('channel-active') ? '正在播放 <i class="icon-pause"></i>' : '进入频道 <i class="icon-arrow-up-right"></i>'; });
+const channelButton = document.querySelector('.channel-button');
+const signal = document.querySelector('.signal');
+let channelPlayer = null;
+
+function stopChannel() {
+  if (!channelPlayer) return;
+  channelPlayer.stop();
+  channelPlayer = null;
+}
+
+function startChannel() {
+  const AudioContext = window.AudioContext || window.webkitAudioContext;
+  if (!AudioContext) return false;
+
+  const context = new AudioContext();
+  const master = context.createGain();
+  master.gain.value = 0.07;
+  master.connect(context.destination);
+
+  const pad = context.createOscillator();
+  const padGain = context.createGain();
+  pad.type = 'sine';
+  pad.frequency.value = 130.81;
+  padGain.gain.value = 0.18;
+  pad.connect(padGain).connect(master);
+  pad.start();
+
+  const melody = [261.63, 329.63, 392, 523.25, 392, 329.63, 293.66, 392];
+  let step = 0;
+  let timer = null;
+  const playStep = () => {
+    const now = context.currentTime;
+    const oscillator = context.createOscillator();
+    const noteGain = context.createGain();
+    oscillator.type = 'triangle';
+    oscillator.frequency.value = melody[step % melody.length];
+    noteGain.gain.setValueAtTime(0.001, now);
+    noteGain.gain.exponentialRampToValueAtTime(0.42, now + 0.04);
+    noteGain.gain.exponentialRampToValueAtTime(0.001, now + 0.62);
+    oscillator.connect(noteGain).connect(master);
+    oscillator.start(now);
+    oscillator.stop(now + 0.65);
+    step += 1;
+    timer = window.setTimeout(playStep, 650);
+  };
+
+  channelPlayer = {
+    stop() {
+      window.clearTimeout(timer);
+      pad.stop();
+      context.close();
+    }
+  };
+  playStep();
+  return true;
+}
+
+channelButton.addEventListener('click', event => {
+  event.preventDefault();
+  const isPlaying = signal.classList.contains('channel-active');
+  if (isPlaying) {
+    stopChannel();
+  } else if (!startChannel()) {
+    return;
+  }
+  signal.classList.toggle('channel-active', !isPlaying);
+  channelButton.setAttribute('aria-pressed', String(!isPlaying));
+  channelButton.innerHTML = !isPlaying ? '正在播放 <i class="icon-pause"></i>' : '进入频道 <i class="icon-arrow-up-right"></i>';
+});
 document.querySelectorAll('a[href^="#"]').forEach(link => link.addEventListener('click', event => { const selector = link.getAttribute('href'); if (selector.length > 1) { const target = document.querySelector(selector); if (target) { event.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); } } }));
 document.addEventListener('keydown', event => { if (event.key === 'Escape') { modal.classList.remove('show'); searchPanel.classList.remove('show'); } });
