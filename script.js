@@ -18,7 +18,9 @@ if (postsContainer && postsData.length) {
 }
 const logsContainer = document.querySelector('#logs');
 if (logsContainer && postsData.length) {
-  const logs = postsData.filter((post) => post.category === 'LITTLE LOGS').slice(0, 3);
+  const logs = [...postsData]
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .slice(0, 3);
   logsContainer.innerHTML = logs.map((post) => `<a href="post.html?slug=${encodeURIComponent(post.slug)}"><small>${formatPostDate(post.date)}</small><b>${post.title}</b><i class="icon-arrow-up-right"></i></a>`).join('');
 }
 
