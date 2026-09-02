@@ -74,12 +74,12 @@ function startChannel() {
   const pad = context.createOscillator();
   const padGain = context.createGain();
   pad.type = 'sine';
-  pad.frequency.value = 130.81;
+  pad.frequency.value = 110;
   padGain.gain.value = 0.11;
   pad.connect(padGain).connect(master);
   pad.start();
 
-  const melody = [329.63, 293.66, 261.63, 0, 293.66, 246.94, 220, 0, 261.63, 293.66, 329.63, 0];
+  const melody = [293.66, 261.63, 233.08, 220, 196, 174.61, 196, 0, 233.08, 261.63, 293.66, 0];
   let step = 0;
   let timer = null;
   const playStep = () => {
