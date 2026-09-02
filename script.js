@@ -7,7 +7,7 @@ const postsContainer = document.querySelector('#posts');
 if (postsContainer && postsData.length) {
   postsContainer.innerHTML = postsData.map((post, index) => `
     <article class="post ${index === 0 ? 'lead' : ''} ${post.category === 'DIGITAL LIFE' ? 'night' : ''}">
-      <a class="image" href="post.html?id=${index}" aria-label="阅读 ${post.title}"></a>
+      ${index === 0 ? `<a class="image" href="post.html?id=${index}" aria-label="阅读 ${post.title}"></a>` : ''}
       <div>
         <p>${post.category} · ${formatPostDate(post.date)}</p>
         <h3>${post.title}</h3>
