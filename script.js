@@ -5,7 +5,7 @@ const formatPostDate = (value) => {
 };
 const postsContainer = document.querySelector('#posts');
 if (postsContainer && postsData.length) {
-  const postsPerPage = 8;
+  const postsPerPage = 6;
   let currentPage = 1;
   const pageCount = Math.ceil(postsData.length / postsPerPage);
   const pagination = document.querySelector('#posts-pagination');
