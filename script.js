@@ -5,7 +5,17 @@ const formatPostDate = (value) => {
 };
 const postsContainer = document.querySelector('#posts');
 if (postsContainer && postsData.length) {
-  postsContainer.innerHTML = postsData.map((post, index) => `
+  const postsPerPage = 6;
+  let currentPage = 1;
+  const pageCount = Math.ceil(postsData.length / postsPerPage);
+  const pagination = document.querySelector('#posts-pagination');
+
+  const renderPostsPage = () => {
+    const start = (currentPage - 1) * postsPerPage;
+    const pagePosts = postsData.slice(start, start + postsPerPage);
+    postsContainer.innerHTML = pagePosts.map((post, pageIndex) => {
+      const index = start + pageIndex;
+      return `
     <article class="post ${index === 0 ? 'lead' : ''} ${post.category === 'DIGITAL LIFE' ? 'night' : ''}" data-post-url="post.html?id=${index}" tabindex="0" role="link" aria-label="阅读 ${post.title}">
       ${index === 0 ? `<a class="image" href="post.html?id=${index}" aria-label="阅读 ${post.title}"></a>` : ''}
       <div>
@@ -13,7 +23,11 @@ if (postsContainer && postsData.length) {
         <h3>${post.title}</h3>
         <span>${post.description}</span>
       </div>
-    </article>`).join('');
+    </article>`;
+    }).join('');
+  };
+
+  renderPostsPage();
 
   const openPostCard = (card) => {
     if (card?.dataset.postUrl) window.location.href = card.dataset.postUrl;
@@ -29,6 +43,25 @@ if (postsContainer && postsData.length) {
       openPostCard(card);
     }
   });
+
+  if (pagination && pageCount > 1) {
+    const renderPagination = () => {
+      pagination.innerHTML = `
+        <button type="button" data-page="prev" ${currentPage === 1 ? 'disabled' : ''}>上一页</button>
+        ${Array.from({ length: pageCount }, (_, index) => `<button type="button" data-page="${index + 1}" class="${currentPage === index + 1 ? 'on' : ''}" aria-label="第 ${index + 1} 页">${String(index + 1).padStart(2, '0')}</button>`).join('')}
+        <button type="button" data-page="next" ${currentPage === pageCount ? 'disabled' : ''}>下一页</button>`;
+    };
+    renderPagination();
+    pagination.addEventListener('click', (event) => {
+      const button = event.target.closest('button');
+      if (!button || button.disabled) return;
+      const action = button.dataset.page;
+      currentPage = action === 'prev' ? currentPage - 1 : action === 'next' ? currentPage + 1 : Number(action);
+      renderPostsPage();
+      renderPagination();
+      document.querySelector('#writing')?.scrollIntoView({ behavior: 'smooth' });
+    });
+  }
 }
 const logsContainer = document.querySelector('#logs');
 if (logsContainer && postsData.length) {
