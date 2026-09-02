@@ -6,15 +6,29 @@ const formatPostDate = (value) => {
 const postsContainer = document.querySelector('#posts');
 if (postsContainer && postsData.length) {
   postsContainer.innerHTML = postsData.map((post, index) => `
-    <article class="post ${index === 0 ? 'lead' : ''} ${post.category === 'DIGITAL LIFE' ? 'night' : ''}">
+    <article class="post ${index === 0 ? 'lead' : ''} ${post.category === 'DIGITAL LIFE' ? 'night' : ''}" data-post-url="post.html?id=${index}" tabindex="0" role="link" aria-label="阅读 ${post.title}">
       ${index === 0 ? `<a class="image" href="post.html?id=${index}" aria-label="阅读 ${post.title}"></a>` : ''}
       <div>
         <p>${post.category} · ${formatPostDate(post.date)}</p>
         <h3>${post.title}</h3>
         <span>${post.description}</span>
-        <a href="post.html?id=${index}">READ NOTE <i class="icon-arrow-up-right"></i></a>
       </div>
     </article>`).join('');
+
+  const openPostCard = (card) => {
+    if (card?.dataset.postUrl) window.location.href = card.dataset.postUrl;
+  };
+  postsContainer.addEventListener('click', (event) => {
+    if (event.target.closest('a')) return;
+    openPostCard(event.target.closest('.post'));
+  });
+  postsContainer.addEventListener('keydown', (event) => {
+    const card = event.target.closest('.post');
+    if (card && (event.key === 'Enter' || event.key === ' ')) {
+      event.preventDefault();
+      openPostCard(card);
+    }
+  });
 }
 const logsContainer = document.querySelector('#logs');
 if (logsContainer && postsData.length) {
