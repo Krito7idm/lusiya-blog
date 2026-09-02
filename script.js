@@ -1,3 +1,27 @@
+const postsData = Array.isArray(window.LUSIYA_POSTS) ? window.LUSIYA_POSTS : [];
+const formatPostDate = (value) => {
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? value : date.toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' }).replaceAll('/', '.');
+};
+const postsContainer = document.querySelector('#posts');
+if (postsContainer && postsData.length) {
+  postsContainer.innerHTML = postsData.map((post, index) => `
+    <article class="post ${index === 0 ? 'lead' : ''} ${post.category === 'DIGITAL LIFE' ? 'night' : ''}">
+      <a class="image" href="post.html?id=${index}" aria-label="阅读 ${post.title}"></a>
+      <div>
+        <p>${post.category} · ${formatPostDate(post.date)}</p>
+        <h3>${post.title}</h3>
+        <span>${post.description}</span>
+        <a href="post.html?id=${index}">READ NOTE <i class="icon-arrow-up-right"></i></a>
+      </div>
+    </article>`).join('');
+}
+const logsContainer = document.querySelector('#logs');
+if (logsContainer && postsData.length) {
+  const logs = postsData.filter((post) => post.category === 'LITTLE LOGS').slice(0, 3);
+  logsContainer.innerHTML = logs.map((post) => `<a href="post.html?slug=${encodeURIComponent(post.slug)}"><small>${formatPostDate(post.date)}</small><b>${post.title}</b><i class="icon-arrow-up-right"></i></a>`).join('');
+}
+
 const notes = [
   ['在噪声里，给自己留一小块静音区', `<p>有一阵子，我把“及时回复”当作一种能力。手机在桌上亮一下，手指就立刻伸过去；网页上出现一个新标签，注意力就跟着跑掉。</p><p>后来我试着在傍晚把通知关掉，给自己留出半小时的静音区。没有目标，也不强迫自己读完什么。只是泡茶、望着窗外，或者把白天没来得及想清楚的事情慢慢捡回来。</p><p>安静不是把世界关在门外，而是给内心腾出一点位置。也许我们真正需要的，不是更多输入，而是重新听见自己的声音。</p>`],
   ['适合一个人散步时听的 12 首歌', `<p>这份歌单没有明确的情绪标签。它适合傍晚六点半的街道、雨后反光的地面，或者回家的末班车。</p><p>01. Midnight City · M83<br>02. Space Song · Beach House<br>03. 505 · Arctic Monkeys<br>04. Plastic Love · 竹内まりや<br>05. Sunset Lover · Petit Biscuit</p><p>剩下的七首，留给你在散步时自己补齐。按下播放键，剩下的交给脚步。</p>`],
@@ -18,7 +42,11 @@ bindReader('.read-log', button => Number(button.dataset.note));
 document.querySelector('.modal-next').addEventListener('click', () => showNote((noteIndex + 1) % notes.length));
 document.querySelector('.close-modal').addEventListener('click', () => modal.classList.remove('show'));
 modal.addEventListener('click', event => { if (event.target === modal) modal.classList.remove('show'); });
-document.querySelector('.open-library').addEventListener('click', event => { event.preventDefault(); showNote(0); });
+document.querySelector('.open-library').addEventListener('click', event => {
+  if (postsData.length) return;
+  event.preventDefault();
+  showNote(0);
+});
 const searchPanel = document.querySelector('.search-panel');
 document.querySelector('.search').addEventListener('click', () => { searchPanel.classList.add('show'); searchPanel.querySelector('input').focus(); });
 document.querySelector('.close-search').addEventListener('click', () => searchPanel.classList.remove('show'));
