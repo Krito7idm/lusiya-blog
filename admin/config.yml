@@ -1,0 +1,24 @@
+backend:
+  name: github
+  repo: Krito7idm/lusiya-blog
+  branch: main
+  squash_merges: true
+media_folder: "assets/uploads"
+public_folder: "/lusiya-blog/assets/uploads"
+site_url: https://krito7idm.github.io/lusiya-blog/
+display_url: https://krito7idm.github.io/lusiya-blog/
+locale: zh_Hans
+publish_mode: editorial_workflow
+collections:
+  - name: "posts"
+    label: "文章"
+    folder: "content/posts"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - { label: "标题", name: "title", widget: "string" }
+      - { label: "摘要", name: "description", widget: "text" }
+      - { label: "发布日期", name: "date", widget: "datetime" }
+      - { label: "分类", name: "category", widget: "string", default: "THOUGHTS" }
+      - { label: "封面", name: "cover", widget: "image", required: false }
+      - { label: "正文", name: "body", widget: "markdown" }
