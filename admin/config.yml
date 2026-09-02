@@ -2,6 +2,8 @@ backend:
   name: github
   repo: Krito7idm/lusiya-blog
   branch: main
+  base_url: https://lusiya-blog-oauth.1787277386.workers.dev
+  auth_endpoint: /auth
   squash_merges: true
 media_folder: "assets/uploads"
 public_folder: "/lusiya-blog/assets/uploads"
