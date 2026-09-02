@@ -1,6 +1,14 @@
 // Generated from content/posts. Do not edit manually.
 window.LUSIYA_POSTS = [
   {
+    "slug": "2026-09-02-一些碎碎念",
+    "title": "一些碎碎念",
+    "description": "碎碎念",
+    "date": "2026-09-03T02:05:00.000+08:00",
+    "category": "THOUGHTS",
+    "body": "<p>这是一段碎碎念 恰喽</p>"
+  },
+  {
     "slug": "2026-08-28-silence",
     "title": "在噪声里，给自己留一小块静音区",
     "description": "有时候我们需要的不是新的输入，而是重新听见自己。",
